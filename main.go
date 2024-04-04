@@ -41,6 +41,8 @@ func main() {
 	keyString := utils.KeyToString(childKey)
 	fmt.Println(keyString)
 
+	// SSS 알고리즘을 사용하여 키 파트 분산
+	// 3개의 키중 2개의 키로 복원 가능
 	secret := seed
 	parts, err := recovery.SplitKey(secret, 3, 2)
 	if err != nil {
@@ -53,6 +55,7 @@ func main() {
 		fmt.Printf("Part %d: %x\n", i+1, part)
 	}
 
+	// 3개의 파트중 2개의 파트를 사용하여 키 복원
 	recovered, err := recovery.CombineParts(parts[:2])
 	if err != nil {
 		fmt.Println("Error combining parts:", err)
