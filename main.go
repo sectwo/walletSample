@@ -5,6 +5,7 @@ import (
 	"hdwallet/bip32"
 	"hdwallet/bip39"
 	"hdwallet/bip44"
+	"hdwallet/recovery"
 	"hdwallet/utils"
 )
 
@@ -39,4 +40,24 @@ func main() {
 	fmt.Println("Child Key:", childKey)
 	keyString := utils.KeyToString(childKey)
 	fmt.Println(keyString)
+
+	secret := seed
+	parts, err := recovery.SplitKey(secret, 3, 2)
+	if err != nil {
+		fmt.Println("Error splitting secret:", err)
+		return
+	}
+
+	fmt.Println("Secret parts:")
+	for i, part := range parts {
+		fmt.Printf("Part %d: %x\n", i+1, part)
+	}
+
+	recovered, err := recovery.CombineParts(parts[:2])
+	if err != nil {
+		fmt.Println("Error combining parts:", err)
+		return
+	}
+
+	fmt.Printf("Recovered secret: %s\n", recovered)
 }
